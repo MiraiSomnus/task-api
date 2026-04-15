@@ -1,4 +1,4 @@
-import { body } from 'express-validator';
+import { body,query } from 'express-validator';
 import { checkValidationResults } from './handleValidationErrors.js';
 
 export const validateTask = [
@@ -15,6 +15,35 @@ export const validateTask = [
     .optional()
     .isBoolean()
     .withMessage('completed must be true or false'),
+
+    checkValidationResults,
+]
+
+export const validateTaskQuery = [
+  query('completed')
+    .optional()
+    .isBoolean()
+    .withMessage('completed must be true or false'),
+
+    query('sortBy')
+    .optional()
+    .isIn(['id', 'title', 'completed'])
+    .withMessage('sortBy must be one of id, title, completed'),
+
+  query('order')
+    .optional()
+    .isIn(['asc', 'desc'])
+    .withMessage('order must be either asc or desc'),
+
+  query('offset')
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage('offset must be a non-negative integer'),
+
+  query('limit')
+    .optional()
+    .isInt({ min: 1, max: 50 })
+    .withMessage('limit must be an integer between 1 and 50'),
 
   checkValidationResults,
 ];

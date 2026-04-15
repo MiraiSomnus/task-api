@@ -60,6 +60,22 @@ paths:
                 example:
                   errors:
                     - 'Title must be at least 3 characters'
+  
+  /tasks/{completed}:
+    get:
+      tags:
+        - Tasks
+      summary: Filtering task by completed
+      description: Filters the lists of tasks by whether they are completed or not
+      parameters:
+        - $ref: '#/components/parameters/queryComplete'
+      responses:
+       '201':
+          description: Task completedsuccessfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
   /health:
     get:
       summary: Health Check
@@ -92,3 +108,60 @@ components:
         completed:
           type: boolean
           example: false
+
+  parameters:
+    queryComplete:
+      name: completed
+      in: query
+      required: false
+      description: Filter task by completion status
+      schema:
+        type: string
+        example: completed 
+
+    querySearch:
+      name: search
+      in: query
+      required: false 
+      description: Filter task by matching title or completion status
+      schema: 
+        type: string
+        example: example 
+
+    querySort:
+      name: sortBy
+      in: query
+      required: false
+      description: Field to sort by (e.g., completed, title)
+      schema:
+        type: string
+        example: title 
+      
+    queryOrder:
+      name: order
+      in: query
+      required: false
+      description: Sort order 
+      schema:
+        type: string
+        enum: [asc,desc]
+        example: desc   
+    
+    queryOffset:
+      name: offset
+      in: query
+      required: false
+      description: Number of tasks to skip
+      schema:
+        type: integer
+        example: 0
+
+    queryLimit:
+      name: limit
+      in: query
+      required: false
+      description: Number of tasks to  return per page
+      schema:
+        type: integer
+        example: 10
+
