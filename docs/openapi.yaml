@@ -18,15 +18,39 @@ paths:
       summary: List all tasks
       tags:
         - Tasks
-      responses:
-        '200':
-          description: OK
+      parameters:
+        - $ref: '#/components/parameters/queryComplete'
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Task'
+                  $ref: '#/components/schemas/Task'   
+      responses:
+        '200':
+          description: Tasks Retrieved Successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+
+        '400':
+          description: 'Error: Bad Request'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                  details:
+                    type: array
+                    items:
+                      type: string
+                example:
+                  error: 'Validation failed'
+                  details:
+                    - 'completed must be true or false'
     post:
       summary: Create a new task
       tags:
@@ -60,22 +84,8 @@ paths:
                 example:
                   errors:
                     - 'Title must be at least 3 characters'
-  
-  /tasks/{completed}:
-    get:
-      tags:
-        - Tasks
-      summary: Filtering task by completed
-      description: Filters the lists of tasks by whether they are completed or not
-      parameters:
-        - $ref: '#/components/parameters/queryComplete'
-      responses:
-       '201':
-          description: Task completedsuccessfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Task'
+ 
+
   /health:
     get:
       summary: Health Check
@@ -114,10 +124,10 @@ components:
       name: completed
       in: query
       required: false
-      description: Filter task by completion status
+      description: Only accepts 'true' or 'false' values
       schema:
         type: string
-        example: completed 
+        example: true
 
     querySearch:
       name: search
